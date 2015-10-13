@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component inheritJdk="true">
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="res" scope="COMPILE">
+		<relative-module-cls project-related="file://$PROJECT_DIR$/res"/>
+	</lib>
+	<lib name="log4j.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/log4j.jar!/"/>
+	</lib>
+	<lib name="commons-logging.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/commons-logging.jar!/"/>
+	</lib>
+	<lib name="spring-core.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/spring-core.jar!/"/>
+	</lib>
+	<lib name="spring-context.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/spring-context.jar!/"/>
+	</lib>
+	<lib name="spring-beans.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/spring-beans.jar!/"/>
+	</lib>
+	<lib name="junit-4.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/junit-4.0.jar!/"/>
+	</lib>
+</component>
