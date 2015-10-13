@@ -22,23 +22,8 @@ import java.awt.event.MouseEvent;
  * @version 2.1, 27.09.07
  * @see Figure
  */
-public class CircleTool implements DrawTool {
+public class CircleTool extends AbstractTool {
 
-    /**
-     * the image resource path.
-     */
-    private static final String IMAGES = "/images/";
-
-    /**
-     * The context we use for drawing.
-     */
-    private DrawContext context;
-
-    /**
-     * The context's view. This variable can be used as a shortcut, i.e.
-     * instead of calling context.getView().
-     */
-    private DrawView view;
 
     /**
      * Temporary variable. During rectangle creation (during a
@@ -47,12 +32,6 @@ public class CircleTool implements DrawTool {
      */
     private Circle newCircle = null;
 
-    /**
-     * Temporary variable.
-     * During rectangle creation this variable refers to the point the
-     * mouse was first pressed.
-     */
-    private Point anchor = null;
 
     /**
      * Create a new rectangle tool for the given context.
@@ -62,16 +41,6 @@ public class CircleTool implements DrawTool {
     public CircleTool(DrawContext context) {
         this.context = context;
         this.view = context.getView();
-    }
-
-    /**
-     * Deactivates the current mode by resetting the cursor
-     * and clearing the status bar.
-     *
-     * @see DrawTool#deactivate()
-     */
-    public void deactivate() {
-        this.context.showStatusText("");
     }
 
     /**
@@ -161,11 +130,6 @@ public class CircleTool implements DrawTool {
         newCircle = null;
         anchor = null;
         this.context.showStatusText("Circle Mode");
-    }
-
-    @Override
-    public Cursor getCursor() {
-        return Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
     }
 
     @Override

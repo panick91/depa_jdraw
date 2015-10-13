@@ -77,17 +77,21 @@ public class Rect extends AbstractFigure {
         return rectangle.getBounds();
     }
 
+
+    List<FigureHandle> handles = new LinkedList<>();
+
     @Override
     public List<FigureHandle> getHandles() {
-        List<FigureHandle> handles = new LinkedList<>();
-        handles.add(new RectFigureHandle(new NorthWest(this)));
-        handles.add(new RectFigureHandle(new North(this)));
-        handles.add(new RectFigureHandle(new NorthEast(this)));
-        handles.add(new RectFigureHandle(new East(this)));
-        handles.add(new RectFigureHandle(new SouthEast(this)));
-        handles.add(new RectFigureHandle(new South(this)));
-        handles.add(new RectFigureHandle(new SouthWest(this)));
-        handles.add(new RectFigureHandle(new West(this)));
+        if (handles.size() == 0) {
+            handles.add(new RectFigureHandle(new NorthWest(this)));
+            handles.add(new RectFigureHandle(new North(this)));
+            handles.add(new RectFigureHandle(new NorthEast(this)));
+            handles.add(new RectFigureHandle(new East(this)));
+            handles.add(new RectFigureHandle(new SouthEast(this)));
+            handles.add(new RectFigureHandle(new South(this)));
+            handles.add(new RectFigureHandle(new SouthWest(this)));
+            handles.add(new RectFigureHandle(new West(this)));
+        }
         return handles;
     }
 

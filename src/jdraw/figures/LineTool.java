@@ -22,24 +22,7 @@ import java.awt.event.MouseEvent;
  * @author  Christoph Denzler
  * @version 2.1, 27.09.07
  */
-public class LineTool implements DrawTool {
-
-	/**
-	 * the image resource path.
-	 */
-	private static final String IMAGES = "/images/";
-
-	/**
-	 * The context we use for drawing.
-	 */
-	private DrawContext context;
-
-	/**
-	 * The context's view. This variable can be used as a shortcut, i.e.
-	 * instead of calling context.getView().
-	 */
-	private DrawView view;
-
+public class LineTool extends AbstractTool  {
 	/**
 	 * Temporary variable. During line creation (during a
 	 * mouse down - mouse drag - mouse up cycle) this variable refers
@@ -48,28 +31,12 @@ public class LineTool implements DrawTool {
 	private Line newLine = null;
 
 	/**
-	 * Temporary variable.
-	 * During line creation this variable refers to the point the
-	 * mouse was first pressed.
-	 */
-	private Point anchor = null;
-
-	/**
 	 * Create a new line tool for the given context.
 	 * @param context a context to use this tool in.
 	 */
 	public LineTool(DrawContext context) {
 		this.context = context;
 		this.view = context.getView();
-	}
-
-	/**
-	 * Deactivates the current mode by resetting the cursor
-	 * and clearing the status bar.
-	 * @see DrawTool#deactivate()
-	 */
-	public void deactivate() {
-		this.context.showStatusText("");
 	}
 
 	/**
@@ -132,11 +99,6 @@ public class LineTool implements DrawTool {
 		newLine = null;
 		anchor = null;
 		this.context.showStatusText("Rectangle Mode");
-	}
-
-	@Override
-	public Cursor getCursor() {
-		return Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
 	}
 	
 	@Override

@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 /**
  * Created by Patrick on 11.10.2015.
  */
-public abstract class RectFigureHandle extends Handle {
+public class RectFigureHandle extends Handle {
 
     protected State state;
 

@@ -22,23 +22,7 @@ import jdraw.framework.*;
  * @author  Christoph Denzler
  * @version 2.1, 27.09.07
  */
-public class RectTool implements DrawTool {
-  
-	/** 
-	 * the image resource path. 
-	 */
-	private static final String IMAGES = "/images/";
-
-	/**
-	 * The context we use for drawing.
-	 */
-	private DrawContext context;
-
-	/**
-	 * The context's view. This variable can be used as a shortcut, i.e.
-	 * instead of calling context.getView().
-	 */
-	private DrawView view;
+public class RectTool extends AbstractTool  {
 
 	/**
 	 * Temporary variable. During rectangle creation (during a
@@ -46,13 +30,6 @@ public class RectTool implements DrawTool {
 	 * to the new rectangle that is inserted.
 	 */
 	private Rect newRect = null;
-
-	/**
-	 * Temporary variable.
-	 * During rectangle creation this variable refers to the point the
-	 * mouse was first pressed.
-	 */
-	private Point anchor = null;
 
 	/**
 	 * Create a new rectangle tool for the given context.
@@ -63,14 +40,6 @@ public class RectTool implements DrawTool {
 		this.view = context.getView();
 	}
 
-	/**
-	 * Deactivates the current mode by resetting the cursor
-	 * and clearing the status bar.
-	 * @see jdraw.framework.DrawTool#deactivate()
-	 */
-	public void deactivate() {
-		this.context.showStatusText("");
-	}
 
 	/**
 	 * Activates the Rectangle Mode. There will be a
@@ -132,11 +101,6 @@ public class RectTool implements DrawTool {
 		newRect = null;
 		anchor = null;
 		this.context.showStatusText("Rectangle Mode");
-	}
-
-	@Override
-	public Cursor getCursor() {
-		return Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
 	}
 	
 	@Override
