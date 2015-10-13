@@ -1,9 +1,8 @@
-package jdraw.handles.linefigures;
+package jdraw.handles;
 
 import jdraw.figures.Line;
 import jdraw.framework.DrawView;
 import jdraw.framework.Figure;
-import jdraw.handles.Handle;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -11,13 +10,13 @@ import java.awt.event.MouseEvent;
 /**
  * Created by Patrick on 11.10.2015.
  */
-public class LineEndHandle extends Handle {
+public class LineStartHandle extends Handle {
 
     protected Line owner;
     protected Point anchor;
 
 
-    public LineEndHandle(Line owner) {
+    public LineStartHandle(Line owner) {
         this.owner = owner;
     }
 
@@ -28,7 +27,7 @@ public class LineEndHandle extends Handle {
 
     @Override
     public Point getLocation() {
-        return owner.getEndPoint();
+        return owner.getStartPoint();
     }
 
     @Override
@@ -39,12 +38,12 @@ public class LineEndHandle extends Handle {
 
     @Override
     public void startInteraction(int x, int y, MouseEvent e, DrawView v) {
-        anchor = owner.getStartPoint();
+        anchor = owner.getEndPoint();
     }
 
     @Override
     public void dragInteraction(int x, int y, MouseEvent e, DrawView v) {
-        owner.setBounds(anchor, new Point(x, y));
+        owner.setBounds(new Point(x,y), anchor);
     }
 
     @Override

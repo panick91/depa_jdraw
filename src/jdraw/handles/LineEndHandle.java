@@ -1,9 +1,8 @@
-package jdraw.handles.rectfigures;
+package jdraw.handles;
 
+import jdraw.figures.Line;
 import jdraw.framework.DrawView;
 import jdraw.framework.Figure;
-import jdraw.handles.Handle;
-import jdraw.handles.rectfigures.States.State;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -11,43 +10,45 @@ import java.awt.event.MouseEvent;
 /**
  * Created by Patrick on 11.10.2015.
  */
-public class RectFigureHandle extends Handle {
+public class LineEndHandle extends Handle {
 
-    protected State state;
+    protected Line owner;
+    protected Point anchor;
 
-    public RectFigureHandle(State state) {
-        this.state = state;
+
+    public LineEndHandle(Line owner) {
+        this.owner = owner;
     }
 
     @Override
     public Figure getOwner() {
-        return state.getOwner();
+        return owner;
     }
 
     @Override
     public Point getLocation() {
-        return state.getLocation();
+        return owner.getEndPoint();
     }
 
     @Override
     public Cursor getCursor() {
-        return state.getCursor();
+        return Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
     }
+
 
     @Override
     public void startInteraction(int x, int y, MouseEvent e, DrawView v) {
-        state.startInteraction(x, y, e, v);
+        anchor = owner.getStartPoint();
     }
 
     @Override
     public void dragInteraction(int x, int y, MouseEvent e, DrawView v) {
-        state = state.setState(x, y);
-        state.dragInteraction(x, y, e, v);
+        owner.setBounds(anchor, new Point(x, y));
     }
 
     @Override
     public void stopInteraction(int x, int y, MouseEvent e, DrawView v) {
-        state.stopInteraction(x, y, e, v);
+        anchor = null;
     }
 
 }

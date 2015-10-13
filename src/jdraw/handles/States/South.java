@@ -1,7 +1,7 @@
-package jdraw.handles.rectfigures.States;
+package jdraw.handles.States;
 
+import jdraw.figures.RectangularFigure;
 import jdraw.framework.DrawView;
-import jdraw.framework.Figure;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -11,13 +11,11 @@ import java.awt.event.MouseEvent;
  */
 public class South extends State {
 
-    public South(Figure handleOwner) {
+    public South(RectangularFigure handleOwner) {
         super(handleOwner);
     }
 
-    public South(Figure handleOwner, Point root) {
-        super(handleOwner, root);
-    }
+    private int originWidth;
 
     @Override
     public Point getLocation() {
@@ -37,12 +35,13 @@ public class South extends State {
 
     @Override
     public void startInteraction(int x, int y, MouseEvent e, DrawView v) {
-        corner = getOwner().getBounds().getLocation();
+        Rectangle r = getOwner().getBounds();
+        corner = r.getLocation();
+        originWidth = r.width;
     }
 
     @Override
     public void dragInteraction(int x, int y, MouseEvent e, DrawView v) {
-        Rectangle r = getOwner().getBounds();
-        getOwner().setBounds(corner, new Point(corner.x + r.width, y));
+        getOwner().setBounds(corner, new Point(corner.x + originWidth, y));
     }
 }

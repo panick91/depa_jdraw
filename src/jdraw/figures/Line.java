@@ -6,8 +6,8 @@
 package jdraw.figures;
 
 import jdraw.framework.FigureHandle;
-import jdraw.handles.linefigures.LineEndHandle;
-import jdraw.handles.linefigures.LineStartHandle;
+import jdraw.handles.LineEndHandle;
+import jdraw.handles.LineStartHandle;
 
 import java.awt.*;
 import java.awt.geom.Line2D;

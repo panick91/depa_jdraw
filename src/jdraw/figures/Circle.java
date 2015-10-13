@@ -1,11 +1,11 @@
 package jdraw.figures;
 
 import jdraw.framework.FigureHandle;
-import jdraw.handles.rectfigures.RectFigureHandle;
-import jdraw.handles.rectfigures.States.East;
-import jdraw.handles.rectfigures.States.North;
-import jdraw.handles.rectfigures.States.South;
-import jdraw.handles.rectfigures.States.West;
+import jdraw.handles.RectFigureHandle;
+import jdraw.handles.States.East;
+import jdraw.handles.States.North;
+import jdraw.handles.States.South;
+import jdraw.handles.States.West;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by Patrick on 03.10.2015.
  */
-public class Circle extends AbstractFigure {
+public class Circle extends RectangularFigure {
 
     private java.awt.geom.Ellipse2D.Double ellipse;
 

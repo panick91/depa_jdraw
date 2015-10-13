@@ -1,5 +1,6 @@
-package jdraw.handles.rectfigures.States;
+package jdraw.handles.States;
 
+import jdraw.figures.RectangularFigure;
 import jdraw.framework.DrawView;
 import jdraw.framework.Figure;
 
@@ -11,13 +12,13 @@ import java.awt.event.MouseEvent;
  */
 public abstract class State {
 
-    protected Figure handleOwner;
+    protected RectangularFigure handleOwner;
     protected Point corner;
 
-    public State(Figure handleOwner){
+    public State(RectangularFigure handleOwner){
         this.handleOwner = handleOwner;
     }
-    public State(Figure handleOwner, Point root){
+    public State(RectangularFigure handleOwner, Point root){
         this.handleOwner = handleOwner;
         this.corner = root;
     }

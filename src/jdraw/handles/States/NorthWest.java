@@ -1,7 +1,7 @@
-package jdraw.handles.rectfigures.States;
+package jdraw.handles.States;
 
+import jdraw.figures.RectangularFigure;
 import jdraw.framework.DrawView;
-import jdraw.framework.Figure;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -11,11 +11,11 @@ import java.awt.event.MouseEvent;
  */
 public class NorthWest extends State {
 
-    public NorthWest(Figure handleOwner) {
+    public NorthWest(RectangularFigure handleOwner) {
         super(handleOwner);
     }
 
-    public NorthWest(Figure handleOwner, Point root) {
+    public NorthWest(RectangularFigure handleOwner, Point root) {
         super(handleOwner, root);
     }
 
@@ -34,11 +34,17 @@ public class NorthWest extends State {
         if (corner.x > newX && corner.y > newY) {
             return this;
         } else if (corner.x < newX && corner.y < newY) {
-            return new SouthEast(handleOwner, corner);
+            State s = new SouthEast(handleOwner, corner);
+            handleOwner.exchangeStates(this, s);
+            return s;
         } else if (corner.x >= newX && corner.y < newY) {
-            return new SouthWest(handleOwner, corner);
+            State s = new SouthWest(handleOwner, corner);
+            handleOwner.exchangeStates(this, s);
+            return s;
         } else {
-            return new NorthEast(handleOwner, corner);
+            State s = new NorthEast(handleOwner, corner);
+            handleOwner.exchangeStates(this, s);
+            return s;
         }
     }
 

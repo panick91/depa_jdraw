@@ -5,23 +5,20 @@
 
 package jdraw.figures;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
+import jdraw.framework.FigureHandle;
+import jdraw.handles.RectFigureHandle;
+import jdraw.handles.States.*;
+
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
-
-import jdraw.framework.*;
-import jdraw.handles.rectfigures.RectFigureHandle;
-import jdraw.handles.rectfigures.States.*;
 
 /**
  * Represents rectangles in JDraw.
  *
  * @author Christoph Denzler
  */
-public class Rect extends AbstractFigure {
+public class Rect extends RectangularFigure {
     /**
      * Use the java.awt.Rectangle in order to save/reuse code.
      */
@@ -62,7 +59,7 @@ public class Rect extends AbstractFigure {
     @Override
     public void move(int dx, int dy) {
         if (dx != 0 || dy != 0) {
-            rectangle.setLocation(rectangle.x + dx, rectangle.y + dy);
+            rectangle.setFrame(rectangle.x + dx, rectangle.y + dy, rectangle.width, rectangle.height);
             notifyObservers();
         }
     }
@@ -77,9 +74,6 @@ public class Rect extends AbstractFigure {
         return rectangle.getBounds();
     }
 
-
-    List<FigureHandle> handles = new LinkedList<>();
-
     @Override
     public List<FigureHandle> getHandles() {
         if (handles.size() == 0) {
@@ -92,7 +86,8 @@ public class Rect extends AbstractFigure {
             handles.add(new RectFigureHandle(new SouthWest(this)));
             handles.add(new RectFigureHandle(new West(this)));
         }
-        return handles;
+        return new LinkedList<>(handles);
     }
+
 
 }

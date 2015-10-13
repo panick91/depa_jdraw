@@ -1,7 +1,7 @@
-package jdraw.handles.rectfigures.States;
+package jdraw.handles.States;
 
+import jdraw.figures.RectangularFigure;
 import jdraw.framework.DrawView;
-import jdraw.framework.Figure;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -9,25 +9,23 @@ import java.awt.event.MouseEvent;
 /**
  * Created by Patrick on 11.10.2015.
  */
-public class East extends State {
+public class North extends State {
 
-    public East(Figure handleOwner) {
+    public North(RectangularFigure handleOwner) {
         super(handleOwner);
     }
 
-    public East(Figure handleOwner, Point root) {
-        super(handleOwner, root);
-    }
+    private int originX;
 
     @Override
     public Point getLocation() {
         Rectangle r = getOwner().getBounds();
-        return new Point(r.x + r.width, r.y + r.height / 2);
+        return new Point(r.x + r.width / 2, r.y);
     }
 
     @Override
     public Cursor getCursor() {
-        return Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR);
+        return Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR);
     }
 
     @Override
@@ -37,12 +35,13 @@ public class East extends State {
 
     @Override
     public void startInteraction(int x, int y, MouseEvent e, DrawView v) {
-        corner = getOwner().getBounds().getLocation();
+        Rectangle r = getOwner().getBounds();
+        corner = new Point(r.x + r.width, r.y + r.height);
+        originX = r.x;
     }
 
     @Override
     public void dragInteraction(int x, int y, MouseEvent e, DrawView v) {
-        Rectangle r = getOwner().getBounds();
-        getOwner().setBounds(corner, new Point(x, r.y + r.height));
+        getOwner().setBounds(new Point(originX, y), corner);
     }
 }
