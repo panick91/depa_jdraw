@@ -10,40 +10,28 @@ import java.awt.event.MouseEvent;
 /**
  * Created by Patrick on 11.10.2015.
  */
-public class LineStartHandle extends Handle {
+public class LineStartHandle extends LineHandle {
 
-    protected Line owner;
-    protected Point anchor;
+    private Point anchor;
 
 
     public LineStartHandle(Line owner) {
-        this.owner = owner;
-    }
-
-    @Override
-    public Figure getOwner() {
-        return owner;
+        super(owner);
     }
 
     @Override
     public Point getLocation() {
-        return owner.getStartPoint();
+        return ((Line)getOwner()).getStartPoint();
     }
-
-    @Override
-    public Cursor getCursor() {
-        return Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
-    }
-
 
     @Override
     public void startInteraction(int x, int y, MouseEvent e, DrawView v) {
-        anchor = owner.getEndPoint();
+        anchor = ((Line)getOwner()).getEndPoint();
     }
 
     @Override
     public void dragInteraction(int x, int y, MouseEvent e, DrawView v) {
-        owner.setBounds(new Point(x,y), anchor);
+        getOwner().setBounds(new Point(x, y), anchor);
     }
 
     @Override

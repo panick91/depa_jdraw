@@ -28,9 +28,9 @@ public abstract class AbstractFigure implements Figure {
         listeners.remove(listener);
     }
 
-    protected void notifyObservers() {
+    protected void notifyObservers(FigureEvent event) {
         for (FigureListener listener : new ArrayList<>(listeners)) {
-            listener.figureChanged(new FigureEvent(this));
+            listener.figureChanged(event);
         }
     }
 

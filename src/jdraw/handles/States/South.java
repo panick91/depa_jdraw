@@ -1,7 +1,8 @@
 package jdraw.handles.States;
 
-import jdraw.figures.RectangularFigure;
+import jdraw.figures.AbstractRectangularFigure;
 import jdraw.framework.DrawView;
+import jdraw.framework.Figure;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -9,16 +10,17 @@ import java.awt.event.MouseEvent;
 /**
  * Created by Patrick on 11.10.2015.
  */
-public class South extends State {
-
-    public South(RectangularFigure handleOwner) {
-        super(handleOwner);
-    }
+public class South extends AbstractState {
 
     private int originWidth;
+    private Point anchor;
+
+    public South(Figure figure) {
+        super(figure);
+    }
 
     @Override
-    public Point getLocation() {
+    public Point getAnchor() {
         Rectangle r = getOwner().getBounds();
         return new Point(r.x + r.width / 2, r.y + r.height);
     }
@@ -29,19 +31,20 @@ public class South extends State {
     }
 
     @Override
-    public State setState(int newX, int newY) {
-        return this;
-    }
-
-    @Override
     public void startInteraction(int x, int y, MouseEvent e, DrawView v) {
         Rectangle r = getOwner().getBounds();
-        corner = r.getLocation();
+        anchor = r.getLocation();
         originWidth = r.width;
     }
 
     @Override
     public void dragInteraction(int x, int y, MouseEvent e, DrawView v) {
-        getOwner().setBounds(corner, new Point(corner.x + originWidth, y));
+        getOwner().setBounds(anchor, new Point(anchor.x + originWidth, y));
+    }
+
+    @Override
+    public void stopInteraction(int x, int y, MouseEvent e, DrawView v) {
+        originWidth = 0;
+        anchor = null;
     }
 }

@@ -2,6 +2,7 @@ package jdraw.test;
 
 import static org.junit.Assert.assertTrue;
 
+import jdraw.figures.Oval;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +17,7 @@ public class CircleTest {
 
 	@Before
 	public void setUp() {
-		f = new jdraw.figures.Circle(0, 0, 20, 10);
+		f = new Oval(0, 0, 20, 10);
 		cnt = 0;
 	}
 

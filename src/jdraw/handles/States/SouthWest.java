@@ -1,7 +1,8 @@
 package jdraw.handles.States;
 
-import jdraw.figures.RectangularFigure;
+import jdraw.figures.AbstractRectangularFigure;
 import jdraw.framework.DrawView;
+import jdraw.framework.Figure;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -9,19 +10,17 @@ import java.awt.event.MouseEvent;
 /**
  * Created by Patrick on 11.10.2015.
  */
-public class SouthWest extends State {
+public class SouthWest extends AbstractState {
 
-    public SouthWest(RectangularFigure handleOwner) {
-        super(handleOwner);
-    }
+    private Point anchor;
 
-    public SouthWest(RectangularFigure handleOwner, Point root) {
-        super(handleOwner, root);
+    public SouthWest(Figure figure) {
+        super(figure);
     }
 
     @Override
-    public Point getLocation() {
-        Rectangle r = handleOwner.getBounds();
+    public Point getAnchor() {
+        Rectangle r = getOwner().getBounds();
         return new Point(r.x, r.y + r.height);
     }
 
@@ -31,32 +30,28 @@ public class SouthWest extends State {
     }
 
     @Override
-    public State setState(int newX, int newY) {
-        if (corner.x > newX && corner.y > newY) {
-            State s = new NorthWest(handleOwner, corner);
-            handleOwner.exchangeStates(this, s);
-            return s;
-        } else if (corner.x < newX && corner.y < newY) {
-            State s = new SouthEast(handleOwner, corner);
-            handleOwner.exchangeStates(this, s);
-            return s;
-        } else if (corner.x >= newX && corner.y < newY) {
-            return this;
-        } else {
-            State s = new NorthEast(handleOwner, corner);
-            handleOwner.exchangeStates(this, s);
-            return s;
-        }
-    }
-
-    @Override
     public void startInteraction(int x, int y, MouseEvent e, DrawView v) {
-        Rectangle r = handleOwner.getBounds();
-        corner = new Point(r.x + r.width, r.y);
+        Rectangle r = getOwner().getBounds();
+        anchor = new Point(r.x + r.width, r.y);
     }
 
     @Override
     public void dragInteraction(int x, int y, MouseEvent e, DrawView v) {
-        handleOwner.setBounds(new Point(x, corner.y), new Point(corner.x, y));
+
+        Rectangle r = getOwner().getBounds();
+        getOwner().setBounds(new Point(x, r.y),
+                new Point(r.x + r.width, y));
+
+        if (x > r.x + r.width) {
+            getOwner().swapHorizontal();
+        }
+        if (y < r.y) {
+            getOwner().swapVertical();
+        }
+    }
+
+    @Override
+    public void stopInteraction(int x, int y, MouseEvent e, DrawView v) {
+        anchor = null;
     }
 }

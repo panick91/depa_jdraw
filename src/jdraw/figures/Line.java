@@ -5,9 +5,11 @@
 
 package jdraw.figures;
 
+import jdraw.framework.FigureEvent;
 import jdraw.framework.FigureHandle;
 import jdraw.handles.LineEndHandle;
 import jdraw.handles.LineStartHandle;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
@@ -52,7 +54,7 @@ public class Line extends AbstractFigure {
     @Override
     public void setBounds(Point origin, Point corner) {
         line.setLine(origin, corner);
-        notifyObservers();
+        notifyObservers(new FigureEvent(this));
     }
 
     @Override
@@ -62,7 +64,7 @@ public class Line extends AbstractFigure {
                     , (int) line.y1 + dy
                     , (int) line.x2 + dx
                     , (int) line.y2 + dy);
-            notifyObservers();
+            notifyObservers(new FigureEvent(this));
         }
     }
 
@@ -76,12 +78,12 @@ public class Line extends AbstractFigure {
         return line.getBounds();
     }
 
-    public Point getStartPoint(){
-        return new Point((int)line.getX1(), (int)line.getY1());
+    public Point getStartPoint() {
+        return new Point((int) line.getX1(), (int) line.getY1());
     }
 
-    public Point getEndPoint(){
-        return new Point((int)line.getX2(), (int)line.getY2());
+    public Point getEndPoint() {
+        return new Point((int) line.getX2(), (int) line.getY2());
     }
 
     @Override
@@ -90,6 +92,16 @@ public class Line extends AbstractFigure {
         handles.add(new LineStartHandle(this));
         handles.add(new LineEndHandle(this));
         return handles;
+    }
+
+    @Override
+    public void swapHorizontal() {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void swapVertical() {
+        throw new NotImplementedException();
     }
 
 }

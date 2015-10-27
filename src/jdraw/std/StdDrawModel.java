@@ -18,21 +18,20 @@ import jdraw.framework.*;
  */
 public class StdDrawModel implements DrawModel, FigureListener {
 
-    public LinkedList<Figure> figures = new LinkedList<>();
-    public List<DrawModelListener> listeners = new ArrayList<>();
+    public List<Figure> figures = new LinkedList<>();
+    public List<DrawModelListener> listeners = new LinkedList<>();
 
     @Override
+    public Iterable<Figure> getFigures() {
+        return Collections.unmodifiableList(figures);
+    }
+    @Override
     public void addFigure(Figure f) {
-        if (figures.indexOf(f) == -1) {
+        if (f != null && !figures.contains(f)) {
             figures.add(f);
             f.addFigureListener(this);
             notifyListeners(f, DrawModelEvent.Type.FIGURE_ADDED);
         }
-    }
-
-    @Override
-    public Iterable<Figure> getFigures() {
-        return figures;
     }
 
     @Override
@@ -44,8 +43,9 @@ public class StdDrawModel implements DrawModel, FigureListener {
     }
 
     @Override
-    public void addModelChangeListener(DrawModelListener listener) {
-        listeners.add(listener);
+    public void addModelChangeListener(DrawModelListener l) {
+        if (l != null && !listeners.contains(l))
+            listeners.add(l);
     }
 
     @Override
@@ -70,36 +70,42 @@ public class StdDrawModel implements DrawModel, FigureListener {
 
     @Override
     public void setFigureIndex(Figure f, int index) {
-        if(index < 0 || index >= figures.size())
+        if (index < 0 || index >= figures.size())
             throw new IndexOutOfBoundsException("Parameter index not withing boundaries of list");
-        if(!figures.contains(f))
-            throw new IllegalArgumentException("Figure does not exist in collection");
 
-        if(figures.remove(f)){
-            figures.add(index,f);
+        int pos = figures.indexOf(f);
+        if (pos < 0) {
+            throw new IllegalArgumentException(
+                    "Figure f not contained in model");
         }
-
-        notifyListeners(f, DrawModelEvent.Type.DRAWING_CHANGED);
+        if (pos != index) {
+            figures.remove(f);
+            figures.add(index, f);
+            notifyListeners(f, DrawModelEvent.Type.DRAWING_CHANGED);
+        }
     }
 
     @Override
     public void removeAllFigures() {
-        for(Figure f : figures){
+        for (Figure f : figures) {
             f.removeFigureListener(this);
         }
         figures.clear();
         notifyListeners(null, DrawModelEvent.Type.DRAWING_CLEARED);
     }
 
-    private void notifyListeners(Figure f, DrawModelEvent.Type eventType) {
-        for (DrawModelListener listener : listeners) {
-            listener.modelChanged(new DrawModelEvent(this, f, eventType));
+    private void notifyListeners(Figure f, DrawModelEvent.Type type) {
+        DrawModelEvent dme = new DrawModelEvent(this, f, type);
+        DrawModelListener[] copy =
+                listeners.toArray(new DrawModelListener[listeners.size()]);
+        for (DrawModelListener l : copy) {
+            l.modelChanged(dme);
         }
     }
 
     @Override
     public void figureChanged(FigureEvent e) {
-        notifyListeners(null, DrawModelEvent.Type.FIGURE_CHANGED);
+        notifyListeners(e.getFigure(), DrawModelEvent.Type.FIGURE_CHANGED);
     }
 
 }

@@ -7,7 +7,6 @@ package jdraw.figures;
 
 import jdraw.framework.DrawContext;
 import jdraw.framework.DrawTool;
-import jdraw.framework.DrawView;
 import jdraw.framework.Figure;
 
 import javax.swing.*;
@@ -22,21 +21,19 @@ import java.awt.event.MouseEvent;
  * @author  Christoph Denzler
  * @version 2.1, 27.09.07
  */
-public class LineTool extends AbstractTool  {
-	/**
-	 * Temporary variable. During line creation (during a
-	 * mouse down - mouse drag - mouse up cycle) this variable refers
-	 * to the new line that is inserted.
-	 */
-	private Line newLine = null;
+public class LineTool extends AbstractDrawTool {
+
+	private DrawContext context;
+	private Point anchor;
+	private Line newLine;
 
 	/**
 	 * Create a new line tool for the given context.
 	 * @param context a context to use this tool in.
 	 */
-	public LineTool(DrawContext context) {
+	public LineTool(DrawContext context, String name, String icon) {
+		super(name, icon);
 		this.context = context;
-		this.view = context.getView();
 	}
 
 	/**
@@ -64,7 +61,7 @@ public class LineTool extends AbstractTool  {
 		}
 		anchor = new Point(x, y);
 		newLine = new Line(x, y, x, y);
-		view.getModel().addFigure(newLine);
+		context.getModel().addFigure(newLine);
 	}
 
 	/**
@@ -100,11 +97,7 @@ public class LineTool extends AbstractTool  {
 		anchor = null;
 		this.context.showStatusText("Rectangle Mode");
 	}
-	
-	@Override
-	public Icon getIcon() {
-		return new ImageIcon(getClass().getResource(IMAGES + "line.png"));
-	}
+
 
 	@Override
 	public String getName() {
