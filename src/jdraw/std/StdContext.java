@@ -21,12 +21,7 @@ import jdraw.figures.OvalTool;
 import jdraw.figures.Group;
 import jdraw.figures.LineTool;
 import jdraw.figures.RectTool;
-import jdraw.framework.DrawCommandHandler;
-import jdraw.framework.DrawModel;
-import jdraw.framework.DrawTool;
-import jdraw.framework.DrawToolFactory;
-import jdraw.framework.DrawView;
-import jdraw.framework.Figure;
+import jdraw.framework.*;
 import jdraw.grid.SimpleGrid;
 
 /**
@@ -110,22 +105,28 @@ public class StdContext extends AbstractContext {
         editMenu.addSeparator();
         JMenuItem group = new JMenuItem("Group");
         group.addActionListener(e -> {
-            getModel().addFigure(new Group(getView().getSelection()));
-            for (Figure f : new ArrayList<>(getView().getSelection())) {
-                getModel().removeFigure(f);
+            List<Figure> selection = getView().getSelection();
+            if (selection != null && selection.size() > 1) {
+                Group g = new Group(selection, getModel());
+                DrawModel m = getModel();
+                for (Figure f : selection) {
+                    m.removeFigure(f);
+                }
+                m.addFigure(g);
+                getView().addToSelection(g);
             }
         });
         editMenu.add(group);
 
         JMenuItem ungroup = new JMenuItem("Ungroup");
         ungroup.addActionListener(e -> {
-            for (Figure f : new ArrayList<>(getView().getSelection())) {
-                if (f instanceof Group) {
-                    Group g = (Group) f;
-                    for (Figure fp : g.getFigureParts()) {
-                        getModel().addFigure(fp);
-                    }
+            for (Figure g : getView().getSelection()){
+                if (g instanceof FigureGroup) {
                     getModel().removeFigure(g);
+                    for (Figure f : ((FigureGroup)g).getFigureParts()) {
+                        getModel().addFigure(f);
+                        getView().addToSelection(f);
+                    }
                 }
             }
 

@@ -5,16 +5,14 @@
 
 package jdraw.figures;
 
-import jdraw.framework.Figure;
-import jdraw.framework.FigureEvent;
-import jdraw.framework.FigureGroup;
-import jdraw.framework.FigureHandle;
+import jdraw.framework.*;
 import jdraw.handles.Handle;
 import jdraw.handles.States.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,14 +24,22 @@ import java.util.List;
 public class Group extends AbstractFigure implements FigureGroup {
 
     private Handle NW = new Handle(new NorthWest(this));
-    private Handle NE = new Handle(new East(this));
-    private Handle SW = new Handle(new South(this));
-    private Handle SE = new Handle(new West(this));
+    private Handle NE = new Handle(new NorthEast(this));
+    private Handle SW = new Handle(new SouthWest(this));
+    private Handle SE = new Handle(new SouthEast(this));
 
     private List<Figure> parts;
 
-    public Group(List<Figure> parts) {
-        this.parts = parts;
+    public Group(List<Figure> parts, DrawModel model) {
+        if (parts == null || parts.size() <= 1)
+            throw new IllegalArgumentException();
+
+        this.parts = new LinkedList<>();
+        for (Figure f : model.getFigures()) {
+            if (parts.contains(f)) {
+                this.parts.add(f);
+            }
+        }
     }
 
     /**
@@ -42,7 +48,7 @@ public class Group extends AbstractFigure implements FigureGroup {
      * @param g the graphics context to use for drawing.
      */
     public void draw(Graphics g) {
-        for (Figure f : new ArrayList<>(parts)) {
+        for (Figure f : parts) {
             f.draw(g);
         }
     }
@@ -50,21 +56,23 @@ public class Group extends AbstractFigure implements FigureGroup {
     @Override
     public void setBounds(Point origin, Point corner) {
 //        rectangle.setFrameFromDiagonal(origin, corner);
-        notifyObservers(new FigureEvent(this));
-
+//        notifyObservers(new FigureEvent(this));
     }
 
     @Override
     public void move(int dx, int dy) {
-        for (Figure f : new ArrayList<>(parts)) {
-            f.move(dx, dy);
+        if (dx != 0 || dy != 0) {
+            for (Figure f : parts) {
+                f.move(dx, dy);
+                super.notifyObservers(new FigureEvent(this));
+            }
         }
     }
 
     @Override
     public boolean contains(int x, int y) {
-        for(Figure f : new ArrayList<>(parts)){
-            if(f.contains(x,y)) return true;
+        for (Figure f : parts) {
+            if (f.contains(x, y)) return true;
         }
         return false;
     }
@@ -73,7 +81,7 @@ public class Group extends AbstractFigure implements FigureGroup {
     public Rectangle getBounds() {
         Rectangle rect = new Rectangle(parts.get(0).getBounds());
 
-        for(Figure f : new ArrayList<>(parts)){
+        for (Figure f : parts) {
             rect.add(f.getBounds());
         }
 
@@ -92,31 +100,15 @@ public class Group extends AbstractFigure implements FigureGroup {
 
     @Override
     public void swapHorizontal() {
-        HandleState NEState = NE.getState();
-        HandleState NWState = NW.getState();
-        HandleState SEState = SE.getState();
-        HandleState SWState = SW.getState();
-        NE.setState(NWState);
-        NW.setState(NEState);
-        SE.setState(SWState);
-        SW.setState(SEState);
     }
 
     @Override
     public void swapVertical() {
-        HandleState NEState = NE.getState();
-        HandleState NWState = NW.getState();
-        HandleState SEState = SE.getState();
-        HandleState SWState = SW.getState();
-        NE.setState(SEState);
-        NW.setState(SWState);
-        SE.setState(NEState);
-        SW.setState(NWState);
     }
 
 
     @Override
     public Iterable<Figure> getFigureParts() {
-        return parts;
+        return Collections.unmodifiableList(parts);
     }
 }
