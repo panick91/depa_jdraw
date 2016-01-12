@@ -6,7 +6,7 @@ package jdraw.std;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,6 +51,10 @@ public class StdContext extends AbstractContext {
     public StdContext(DrawView view, List<DrawToolFactory> toolFactories) {
         super(view, toolFactories);
     }
+
+
+    private List<Figure> clipboard;
+    private int pasteCounter = 0;
 
     /**
      * Creates and initializes the "Edit" menu.
@@ -98,9 +102,44 @@ public class StdContext extends AbstractContext {
         });
 
         editMenu.addSeparator();
-        editMenu.add("Cut").setEnabled(false);
-        editMenu.add("Copy").setEnabled(false);
-        editMenu.add("Paste").setEnabled(false);
+        JMenuItem cut = new JMenuItem("Cut");
+        cut.addActionListener(e -> {
+            List<Figure> selection = getView().getSelection();
+            if (selection != null && selection.size() > 0) {
+                clipboard = null;
+                pasteCounter = -1;
+                clipboard = new LinkedList<>(selection);
+                for (Figure f : selection) {
+                    getModel().removeFigure(f);
+                }
+            }
+
+        });
+        editMenu.add(cut);
+        JMenuItem copy = new JMenuItem("Copy");
+        copy.addActionListener(e -> {
+            List<Figure> selection = getView().getSelection();
+            if (selection != null && selection.size() > 0) {
+                clipboard = null;
+                pasteCounter = 0;
+                clipboard = new LinkedList<>(selection);
+            }
+        });
+        editMenu.add(copy);
+        JMenuItem paste = new JMenuItem("Paste");
+        paste.addActionListener(e -> {
+            getView().clearSelection();
+            if (clipboard != null && clipboard.size() > 0) {
+                DrawModel m = getModel();
+                for (Figure f : new LinkedList<>(clipboard)) {
+                    Figure newFig = f.clone();
+                    newFig.move(++pasteCounter * 10, 0);
+                    m.addFigure(newFig);
+                    getView().addToSelection(newFig);
+                }
+            }
+        });
+        editMenu.add(paste);
 
         editMenu.addSeparator();
         JMenuItem group = new JMenuItem("Group");
@@ -120,10 +159,10 @@ public class StdContext extends AbstractContext {
 
         JMenuItem ungroup = new JMenuItem("Ungroup");
         ungroup.addActionListener(e -> {
-            for (Figure g : getView().getSelection()){
+            for (Figure g : getView().getSelection()) {
                 if (g instanceof FigureGroup) {
                     getModel().removeFigure(g);
-                    for (Figure f : ((FigureGroup)g).getFigureParts()) {
+                    for (Figure f : ((FigureGroup) g).getFigureParts()) {
                         getModel().addFigure(f);
                         getView().addToSelection(f);
                     }
@@ -289,6 +328,21 @@ public class StdContext extends AbstractContext {
                 file = new File(chooser.getCurrentDirectory(), file.getName() + ".draw");
             }
             System.out.println("save current graphic to file " + file.getName());
+
+            try {
+                ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(file));
+
+                for (Figure f : getModel().getFigures()) {
+                    outputStream.writeObject(f.clone());
+                }
+
+                outputStream.writeObject(null);
+
+                outputStream.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -317,6 +371,23 @@ public class StdContext extends AbstractContext {
             // read jdraw graphic
             System.out.println("read file "
                     + chooser.getSelectedFile().getName());
+
+            getModel().removeAllFigures();
+
+            try {
+                ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(chooser.getSelectedFile()));
+
+                Object importObj = inputStream.readObject();
+                while(importObj!= null){
+                    getModel().addFigure((Figure)importObj);
+                    importObj = inputStream.readObject();
+                }
+
+                inputStream.close();
+
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 

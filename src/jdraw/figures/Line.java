@@ -26,7 +26,7 @@ public class Line extends AbstractFigure {
      * Use the java.awt.Rectangle in order to save/reuse code.
      */
     private Line2D.Double line;
-    private int HIT_BOX_SIZE = 6;
+    private final int HIT_BOX_SIZE = 6;
 
     /**
      * Create a new line of the given dimension.
@@ -104,4 +104,10 @@ public class Line extends AbstractFigure {
         throw new NotImplementedException();
     }
 
+    @Override
+    public Line clone(){
+        Line l =  (Line) super.clone();
+        l.line = (Line2D.Double) l.line.clone();
+        return l;
+    }
 }

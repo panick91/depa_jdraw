@@ -7,11 +7,12 @@ import jdraw.handles.States.HandleState;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.io.Serializable;
 
 /**
  * Created by Patrick on 13.10.2015.
  */
-public class Handle implements FigureHandle {
+public class Handle implements FigureHandle{
 
     private final int handleSize = 6;
     private HandleState state;

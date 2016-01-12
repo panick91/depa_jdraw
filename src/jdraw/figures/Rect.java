@@ -21,13 +21,13 @@ import java.util.List;
 public class Rect extends AbstractRectangularFigure {
 
     private Handle NW = new Handle(new NorthWest(this));
-    private Handle N  = new Handle(new North(this));
+    private Handle N = new Handle(new North(this));
     private Handle NE = new Handle(new NorthEast(this));
-    private Handle E  = new Handle(new East(this));
+    private Handle E = new Handle(new East(this));
     private Handle SE = new Handle(new SouthEast(this));
-    private Handle S  = new Handle(new South(this));
+    private Handle S = new Handle(new South(this));
     private Handle SW = new Handle(new SouthWest(this));
-    private Handle W  = new Handle(new West(this));
+    private Handle W = new Handle(new West(this));
 
     public Rect(Point p) {
         super(p);
@@ -53,16 +53,23 @@ public class Rect extends AbstractRectangularFigure {
 
     @Override
     public List<FigureHandle> getHandles() {
-        if (handles.size() == 0) {
-            handles.add(NW);
-            handles.add(N);
-            handles.add(NE);
-            handles.add(E);
-            handles.add(SE);
-            handles.add(S);
-            handles.add(SW);
-            handles.add(W);
-        }
+        LinkedList<Handle> handles = new LinkedList<>();
+        if(NW == null) NW = new Handle(new NorthWest(this));
+        handles.add(NW);
+        if(N == null) N = new Handle(new North(this));
+        handles.add(N);
+        if(NE == null) NE = new Handle(new NorthEast(this));
+        handles.add(NE);
+        if(E == null) E = new Handle(new East(this));
+        handles.add(E);
+        if(SE == null) SE = new Handle(new SouthEast(this));
+        handles.add(SE);
+        if(S == null) S = new Handle(new South(this));
+        handles.add(S);
+        if(SW == null) SW = new Handle(new SouthWest(this));
+        handles.add(SW);
+        if(W == null) W = new Handle(new West(this));
+        handles.add(W);
         return new LinkedList<>(handles);
     }
 
@@ -98,5 +105,17 @@ public class Rect extends AbstractRectangularFigure {
         S.setState(NState);
     }
 
-
+    @Override
+    public Rect clone() {
+        Rect r = (Rect) super.clone();
+        r.NW = null;
+        r.N = null;
+        r.NE = null;
+        r.E = null;
+        r.SE = null;
+        r.S = null;
+        r.SW = null;
+        r.W = null;
+        return r;
+    }
 }

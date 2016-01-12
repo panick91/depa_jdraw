@@ -7,11 +7,12 @@ package jdraw.figures;
 
 import jdraw.framework.*;
 import jdraw.handles.Handle;
-import jdraw.handles.States.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import jdraw.handles.States.NorthEast;
+import jdraw.handles.States.NorthWest;
+import jdraw.handles.States.SouthEast;
+import jdraw.handles.States.SouthWest;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -91,10 +92,14 @@ public class Group extends AbstractFigure implements FigureGroup {
     @Override
     public List<FigureHandle> getHandles() {
         List<FigureHandle> handles = new LinkedList<>();
+        if(NW == null) NW = new Handle(new NorthWest(this));
         handles.add(NW);
+        if(NE == null) NE = new Handle(new NorthEast(this));
         handles.add(NE);
-        handles.add(SW);
+        if(SE == null) SE = new Handle(new SouthEast(this));
         handles.add(SE);
+        if(SW == null) SW = new Handle(new SouthWest(this));
+        handles.add(SW);
         return handles;
     }
 
@@ -110,5 +115,19 @@ public class Group extends AbstractFigure implements FigureGroup {
     @Override
     public Iterable<Figure> getFigureParts() {
         return Collections.unmodifiableList(parts);
+    }
+
+    @Override
+    public Group clone() {
+        Group g = (Group) super.clone();
+        g.NW = null;
+        g.NE = null;
+        g.SW = null;
+        g.SE = null;
+        g.parts = new LinkedList<>();
+        for(Figure f : this.parts){
+            g.parts.add(f.clone());
+        }
+        return g;
     }
 }

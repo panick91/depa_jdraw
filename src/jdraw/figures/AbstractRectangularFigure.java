@@ -2,6 +2,8 @@ package jdraw.figures;
 
 import jdraw.framework.FigureEvent;
 import jdraw.framework.FigureHandle;
+import jdraw.handles.Handle;
+import jdraw.handles.States.HandleState;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -13,7 +15,6 @@ import java.util.List;
 public abstract class AbstractRectangularFigure extends AbstractFigure {
 
     private Rectangle rectangle = null;
-    protected List<FigureHandle> handles = new LinkedList<>();
 
     protected AbstractRectangularFigure(Point origin) {
         rectangle = new Rectangle(origin);
@@ -47,6 +48,13 @@ public abstract class AbstractRectangularFigure extends AbstractFigure {
     @Override
     public boolean contains(int x, int y) {
         return rectangle.contains(x, y);
+    }
+
+    @Override
+    public AbstractRectangularFigure clone() {
+        AbstractRectangularFigure f = (AbstractRectangularFigure) super.clone();
+        f.rectangle = (Rectangle)f.rectangle.clone();
+        return f;
     }
 
 }

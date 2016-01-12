@@ -35,7 +35,13 @@ public abstract class AbstractFigure implements Figure {
     }
 
     @Override
-    public Figure clone() {
-        return null;
+    public AbstractFigure clone() {
+        try {
+            AbstractFigure copy = (AbstractFigure) super.clone();
+            copy.listeners = new LinkedList<>();
+            return copy;
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError(e.getMessage());
+        }
     }
 }
