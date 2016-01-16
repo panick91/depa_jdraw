@@ -17,10 +17,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
 
-import jdraw.figures.OvalTool;
-import jdraw.figures.Group;
-import jdraw.figures.LineTool;
-import jdraw.figures.RectTool;
+import jdraw.figures.*;
 import jdraw.framework.*;
 import jdraw.grid.SimpleGrid;
 
@@ -202,6 +199,34 @@ public class StdContext extends AbstractContext {
         grid.add(noGrid);
 
         editMenu.add(grid);
+        editMenu.addSeparator();
+
+        JMenuItem decorator = new JMenuItem("Border");
+        decorator.addActionListener(e -> {
+            List<Figure> s = getView().getSelection();
+            getView().clearSelection();
+            for (Figure f : s) {
+                BorderDecorator dec = new BorderDecorator(f);
+                getModel().removeFigure(f);
+                getModel().addFigure(dec);
+                getView().addToSelection(dec);
+            }
+        });
+        editMenu.add(decorator);
+
+        JMenuItem bundle = new JMenuItem("Bundle");
+        bundle.addActionListener(e -> {
+            List<Figure> s = getView().getSelection();
+            getView().clearSelection();
+            for (Figure f : s) {
+                BundleDecorator dec = new BundleDecorator(f);
+                getModel().removeFigure(f);
+                getModel().addFigure(dec);
+                getView().addToSelection(dec);
+            }
+        });
+        editMenu.add(bundle);
+
 
         return editMenu;
     }
@@ -378,8 +403,8 @@ public class StdContext extends AbstractContext {
                 ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(chooser.getSelectedFile()));
 
                 Object importObj = inputStream.readObject();
-                while(importObj!= null){
-                    getModel().addFigure((Figure)importObj);
+                while (importObj != null) {
+                    getModel().addFigure((Figure) importObj);
                     importObj = inputStream.readObject();
                 }
 
