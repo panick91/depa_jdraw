@@ -16,6 +16,7 @@ import java.util.Set;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import jdraw.commands.MoveCommand;
 import jdraw.framework.DrawContext;
 import jdraw.framework.DrawTool;
 import jdraw.framework.DrawView;
@@ -242,7 +243,7 @@ public class StdSelectionTool implements DrawTool {
 
 		for (Figure f : view.getSelection()) {
 			f.move(k, l);
-			view.getModel().getDrawCommandHandler().addCommand(new MoveCommand(f, k, l));			
+			view.getModel().getDrawCommandHandler().addCommand(new MoveCommand(f, k, l));
 		}
 
 		tempX = i;

@@ -1,5 +1,6 @@
 package jdraw.figures;
 
+import jdraw.commands.AddFigureCommand;
 import jdraw.framework.DrawContext;
 import jdraw.framework.Figure;
 
@@ -54,6 +55,7 @@ public abstract class AbstractDragDrawTool extends AbstractDrawTool {
         if (r.width == 0 && r.height == 0) {
             context.getModel().removeFigure(figure);
         }
+        context.getModel().getDrawCommandHandler().addCommand(new AddFigureCommand(context.getModel(), figure));
         anchor = null;
         figure = null;
     }

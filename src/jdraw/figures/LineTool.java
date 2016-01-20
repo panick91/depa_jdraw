@@ -5,6 +5,7 @@
 
 package jdraw.figures;
 
+import jdraw.commands.AddFigureCommand;
 import jdraw.framework.DrawContext;
 import jdraw.framework.DrawTool;
 import jdraw.framework.Figure;
@@ -93,6 +94,7 @@ public class LineTool extends AbstractDrawTool {
 	 * @see DrawTool#mouseUp(int, int, MouseEvent)
 	 */
 	public void mouseUp(int x, int y, MouseEvent e) {
+		context.getModel().getDrawCommandHandler().addCommand(new AddFigureCommand(context.getModel(), newLine));
 		newLine = null;
 		anchor = null;
 		this.context.showStatusText("Rectangle Mode");

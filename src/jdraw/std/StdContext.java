@@ -7,7 +7,6 @@ package jdraw.std;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,6 +16,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
 
+import jdraw.commands.GroupFigureCommand;
 import jdraw.figures.*;
 import jdraw.framework.*;
 import jdraw.grid.SimpleGrid;
@@ -150,6 +150,7 @@ public class StdContext extends AbstractContext {
                 }
                 m.addFigure(g);
                 getView().addToSelection(g);
+                getModel().getDrawCommandHandler().addCommand(new GroupFigureCommand(getModel(),g,true));
             }
         });
         editMenu.add(group);
@@ -163,6 +164,7 @@ public class StdContext extends AbstractContext {
                         getModel().addFigure(f);
                         getView().addToSelection(f);
                     }
+                    getModel().getDrawCommandHandler().addCommand(new GroupFigureCommand(getModel(),(FigureGroup) g,false));
                 }
             }
 
